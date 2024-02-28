@@ -16,31 +16,22 @@ use App\Http\Controllers\PropertyController;
 |
 */
 Route::post('login', [AuthController::class, 'login']);
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+
+    Route::post('edit/property', [PropertyController::class,'store']);
+
+    Route::put('edit/property/{propertyId}', [PropertyController::class, 'update']);
 });
-
-
-// Route::get('properties', [PropertyController::class, 'index']);
-// Route::post('properties', [PropertyController::class, 'store']);
-// Route::get('properties/{id}', [PropertyController::class, 'show']);
-// Route::put('properties/{id}', [PropertyController::class, 'update']);
-// Route::delete('properties/{id}', [PropertyController::class, 'destroy']);
-
-// /listmyproperty
-Route::get('edit/property', [PropertyController::class, 'index']);
-Route::post('edit/property', [PropertyController::class,'store']);
-
-// /listmyproperty
 Route::get('listmyproperty', [PropertyController::class,'index']);
-// property/${propertyId}
-Route::get('edit/property/{propertyId}', [PropertyController::class, 'update']);
-
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::post('/verify-token', function () {
     return response()->json(['message' => 'Token válido'], 200);
 });
+// logout
+Route::post('logout', [AuthController::class, 'logout']);
 
